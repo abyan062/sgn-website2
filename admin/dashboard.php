@@ -40,7 +40,7 @@ $buku_result = mysqli_query($koneksi, $buku_query);
     <style>
         .sidebar {
             background-color: #212529;
-            min-height: 100vh;
+            min-height: 180vh;
         }
         .sidebar .nav-link {
             color: #fff;
@@ -72,18 +72,6 @@ $buku_result = mysqli_query($koneksi, $buku_query);
             padding: 5px 10px;
             border-radius: 20px;
         }
-        .stok-tersedia {
-            background-color: #198754;
-            color: white;
-        }
-        .stok-habis {
-            background-color: #dc3545;
-            color: white;
-        }
-        .stok-sedikit {
-            background-color: #ffc107;
-            color: black;
-        }
     </style>
 </head>
 <body>
@@ -105,7 +93,11 @@ $buku_result = mysqli_query($koneksi, $buku_query);
                         <a class="nav-link" href="tambah_buku.php">
                             <i class="fas fa-plus-circle me-2"></i> Tambah Buku
                         </a>
-                        <a class="nav-link" href="logout.php">
+                        <a class="nav-link" href="../index.php" target="_blank">
+                            <i class="fas fa-globe me-2"></i> Lihat Website
+                        </a>
+                        <hr class="text-white-50">
+                        <a class="nav-link text-danger" href="logout.php">
                             <i class="fas fa-sign-out-alt me-2"></i> Logout
                         </a>
                     </nav>
@@ -119,6 +111,9 @@ $buku_result = mysqli_query($koneksi, $buku_query);
                         <i class="fas fa-tachometer-alt"></i> Dashboard
                     </h2>
                     <div>
+                        <a href="../index.php" class="btn btn-sm btn-outline-primary me-2">
+                            <i class="fas fa-globe"></i> Lihat Website
+                        </a>
                         <span class="badge bg-secondary">
                             <i class="fas fa-user"></i> <?= $_SESSION['admin_nama'] ?>
                         </span>
@@ -212,18 +207,10 @@ $buku_result = mysqli_query($koneksi, $buku_query);
                                                 <td>
                                                     <?php 
                                                     $stok = $buku['stok'] ?? 0;
-                                                    if ($stok > 10): ?>
-                                                        <span class="badge bg-success stok-badge">
-                                                            <i class="fas fa-box"></i> <?= $stok ?> (Tersedia)
-                                                        </span>
-                                                    <?php elseif ($stok > 0 && $stok <= 10): ?>
-                                                        <span class="badge bg-warning text-dark stok-badge">
-                                                            <i class="fas fa-exclamation-triangle"></i> <?= $stok ?> (Sisa sedikit)
-                                                        </span>
+                                                    if ($stok > 0): ?>
+                                                        <span class="badge bg-success"><?= $stok ?></span>
                                                     <?php else: ?>
-                                                        <span class="badge bg-danger stok-badge">
-                                                            <i class="fas fa-ban"></i> Habis (0)
-                                                        </span>
+                                                        <span class="badge bg-danger">Habis</span>
                                                     <?php endif; ?>
                                                 </td>
                                                 <td>

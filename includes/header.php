@@ -1,6 +1,7 @@
 <?php
 // File: includes/header.php
 // Bagian atas semua halaman
+session_start(); // Tambahkan session_start() untuk cek login
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -47,6 +48,35 @@
                             <i class="fas fa-envelope"></i> Kontak
                         </a>
                     </li>
+                    <!-- ========== NAVBAR LOGIN (TAMBAHAN) ========== -->
+                    <?php if (isset($_SESSION['admin_id'])): ?>
+                        <!-- Jika sudah login, tampilkan nama admin dan link dashboard -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="adminDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-user-circle"></i> <?= htmlspecialchars($_SESSION['admin_nama']) ?>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="adminDropdown">
+                                <li><a class="dropdown-item" href="admin/dashboard.php">
+                                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                                </a></li>
+                                <li><a class="dropdown-item" href="admin/tambah_buku.php">
+                                    <i class="fas fa-plus-circle"></i> Tambah Buku
+                                </a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item text-danger" href="admin/logout.php">
+                                    <i class="fas fa-sign-out-alt"></i> Logout
+                                </a></li>
+                            </ul>
+                        </li>
+                    <?php else: ?>
+                        <!-- Jika belum login, tampilkan tombol login -->
+                        <li class="nav-item">
+                            <a class="nav-link btn btn-outline-light px-3 ms-2" href="admin/login.php">
+                                <i class="fas fa-sign-in-alt"></i> Login
+                            </a>
+                        </li>
+                    <?php endif; ?>
+                    <!-- ========== END NAVBAR LOGIN ========== -->
                 </ul>
             </div>
         </div>

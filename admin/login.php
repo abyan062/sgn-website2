@@ -25,7 +25,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $_SESSION['admin_id'] = $admin['id'];
         $_SESSION['admin_nama'] = $admin['nama_lengkap'];
         $_SESSION['admin_username'] = $admin['username'];
-        header("Location: dashboard.php");
+        
+        // Redirect ke halaman sebelumnya atau dashboard
+        if (isset($_GET['redirect'])) {
+            header("Location: ../" . $_GET['redirect']);
+        } else {
+            header("Location: dashboard.php");
+        }
         exit;
     } else {
         $error = "Username atau password salah!";
@@ -42,7 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
             min-height: 100vh;
             display: flex;
             align-items: center;

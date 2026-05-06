@@ -5,7 +5,7 @@
 $host = "localhost";     // alamat server database
 $username = "root";      // username default XAMPP
 $password = "";          // password default XAMPP (kosong)
-$database = "db_sgn";    // nama database kita
+$database = "db_sgn2";    // nama database kita
 
 // Bikin koneksi
 $koneksi = mysqli_connect($host, $username, $password, $database);
