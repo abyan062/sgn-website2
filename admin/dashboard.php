@@ -22,12 +22,22 @@ $query_admin = "SELECT COUNT(*) as total FROM tbl_admin";
 $result_admin = mysqli_query($koneksi, $query_admin);
 $total_admin = mysqli_fetch_assoc($result_admin)['total'];
 
+// ✅ TAMBAHAN: Hitung total pesan
+$query_pesan = "SELECT COUNT(*) as total FROM tbl_pesan";
+$result_pesan = mysqli_query($koneksi, $query_pesan);
+$total_pesan = mysqli_fetch_assoc($result_pesan)['total'];
+
 // Ambil semua buku
 $buku_query = "SELECT b.*, k.nama_kategori 
                FROM tbl_buku b 
                LEFT JOIN tbl_kategori k ON b.id_kategori = k.id 
                ORDER BY b.created_at DESC";
 $buku_result = mysqli_query($koneksi, $buku_query);
+
+// ✅ TAMBAHAN: Ambil 5 pesan terbaru
+$pesan_terbaru = mysqli_query($koneksi, 
+    "SELECT * FROM tbl_pesan ORDER BY created_at DESC LIMIT 5"
+);
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -40,7 +50,7 @@ $buku_result = mysqli_query($koneksi, $buku_query);
     <style>
         .sidebar {
             background-color: #212529;
-            min-height: 180vh;
+            min-height: 100vh;
         }
         .sidebar .nav-link {
             color: #fff;
@@ -72,6 +82,28 @@ $buku_result = mysqli_query($koneksi, $buku_query);
             padding: 5px 10px;
             border-radius: 20px;
         }
+        /* Kotak pesan */
+        .pesan-item {
+            border-left: 3px solid #0d6efd;
+            background: #f8f9fa;
+            border-radius: 0 8px 8px 0;
+            padding: 12px 16px;
+            margin-bottom: 10px;
+            transition: background 0.2s;
+        }
+        .pesan-item:hover {
+            background: #e9f0ff;
+        }
+        .avatar-circle {
+            width: 38px; height: 38px;
+            border-radius: 50%;
+            background: #dbeafe;
+            color: #1d4ed8;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 700;
+            font-size: 0.95rem;
+            flex-shrink: 0;
+        }
     </style>
 </head>
 <body>
@@ -92,6 +124,13 @@ $buku_result = mysqli_query($koneksi, $buku_query);
                         </a>
                         <a class="nav-link" href="tambah_buku.php">
                             <i class="fas fa-plus-circle me-2"></i> Tambah Buku
+                        </a>
+                        <!-- ✅ TAMBAHAN: Menu Pesan -->
+                        <a class="nav-link" href="pesan.php">
+                            <i class="fas fa-envelope me-2"></i> Pesan Masuk
+                            <?php if ($total_pesan > 0): ?>
+                                <span class="badge bg-danger ms-1"><?= $total_pesan ?></span>
+                            <?php endif; ?>
                         </a>
                         <a class="nav-link" href="../index.php" target="_blank">
                             <i class="fas fa-globe me-2"></i> Lihat Website
@@ -122,7 +161,7 @@ $buku_result = mysqli_query($koneksi, $buku_query);
                 
                 <!-- Stat Cards -->
                 <div class="row mb-4">
-                    <div class="col-md-4 mb-3">
+                    <div class="col-md-3 mb-3">
                         <div class="card stat-card bg-primary text-white">
                             <div class="card-body">
                                 <div class="d-flex justify-content-between align-items-center">
@@ -135,7 +174,7 @@ $buku_result = mysqli_query($koneksi, $buku_query);
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-4 mb-3">
+                    <div class="col-md-3 mb-3">
                         <div class="card stat-card bg-success text-white">
                             <div class="card-body">
                                 <div class="d-flex justify-content-between align-items-center">
@@ -148,7 +187,7 @@ $buku_result = mysqli_query($koneksi, $buku_query);
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-4 mb-3">
+                    <div class="col-md-3 mb-3">
                         <div class="card stat-card bg-info text-white">
                             <div class="card-body">
                                 <div class="d-flex justify-content-between align-items-center">
@@ -160,6 +199,66 @@ $buku_result = mysqli_query($koneksi, $buku_query);
                                 </div>
                             </div>
                         </div>
+                    </div>
+                    <!-- ✅ TAMBAHAN: Stat card pesan -->
+                    <div class="col-md-3 mb-3">
+                        <div class="card stat-card bg-warning text-white">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6 class="mb-0">Pesan Masuk</h6>
+                                        <h2 class="mb-0"><?= $total_pesan ?></h2>
+                                    </div>
+                                    <i class="fas fa-envelope fa-3x opacity-50"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ✅ TAMBAHAN: Pesan Terbaru -->
+                <div class="card mb-4">
+                    <div class="card-header bg-warning text-white d-flex justify-content-between align-items-center">
+                        <span><i class="fas fa-envelope me-2"></i>Pesan Terbaru</span>
+                        <a href="pesan.php" class="btn btn-sm btn-light">
+                            Lihat Semua <i class="fas fa-arrow-right ms-1"></i>
+                        </a>
+                    </div>
+                    <div class="card-body">
+                        <?php if ($pesan_terbaru && mysqli_num_rows($pesan_terbaru) > 0): ?>
+                            <?php while ($p = mysqli_fetch_assoc($pesan_terbaru)): ?>
+                                <div class="pesan-item d-flex gap-3 align-items-start">
+                                    <div class="avatar-circle">
+                                        <?= strtoupper(substr($p['nama'], 0, 1)) ?>
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <div class="d-flex justify-content-between">
+                                            <span class="fw-semibold"><?= htmlspecialchars($p['nama']) ?></span>
+                                            <small class="text-muted">
+                                                <?= date('d M Y, H:i', strtotime($p['created_at'])) ?>
+                                            </small>
+                                        </div>
+                                        <small class="text-muted d-block">
+                                            <i class="fas fa-envelope me-1"></i><?= htmlspecialchars($p['email']) ?>
+                                        </small>
+                                        <?php if (!empty($p['subjek'])): ?>
+                                            <small class="text-muted d-block">
+                                                <i class="fas fa-tag me-1"></i><?= htmlspecialchars($p['subjek']) ?>
+                                            </small>
+                                        <?php endif; ?>
+                                        <p class="mb-0 mt-1 small text-secondary">
+                                            <?= htmlspecialchars(substr($p['pesan'], 0, 100)) ?>
+                                            <?= strlen($p['pesan']) > 100 ? '...' : '' ?>
+                                        </p>
+                                    </div>
+                                </div>
+                            <?php endwhile; ?>
+                        <?php else: ?>
+                            <div class="text-center py-4 text-muted">
+                                <i class="fas fa-inbox fa-2x mb-2 d-block"></i>
+                                Belum ada pesan masuk
+                            </div>
+                        <?php endif; ?>
                     </div>
                 </div>
                 
@@ -235,8 +334,11 @@ $buku_result = mysqli_query($koneksi, $buku_query);
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
