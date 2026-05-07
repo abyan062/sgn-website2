@@ -27,6 +27,11 @@ $query_pesan = "SELECT COUNT(*) as total FROM tbl_pesan";
 $result_pesan = mysqli_query($koneksi, $query_pesan);
 $total_pesan = mysqli_fetch_assoc($result_pesan)['total'];
 
+// Hitung total artikel blog
+$query_blog = "SELECT COUNT(*) as total FROM tbl_blog";
+$result_blog = mysqli_query($koneksi, $query_blog);
+$total_blog = mysqli_fetch_assoc($result_blog)['total'];
+
 // Ambil semua buku
 $buku_query = "SELECT b.*, k.nama_kategori 
                FROM tbl_buku b 
@@ -105,6 +110,12 @@ $buku_result = mysqli_query($koneksi, $buku_query);
                             <i class="fas fa-envelope me-2"></i> Pesan Masuk
                             <?php if ($total_pesan > 0): ?>
                                 <span class="badge bg-danger ms-1"><?= $total_pesan ?></span>
+                            <?php endif; ?>
+                        </a>
+                        <a class="nav-link" href="kelola_blog.php">
+                            <i class="fas fa-newspaper me-2"></i> Kelola Blog
+                            <?php if ($total_blog > 0): ?>
+                                <span class="badge bg-info ms-1"><?= $total_blog ?></span>
                             <?php endif; ?>
                         </a>
                         <a class="nav-link" href="../index.php" target="_blank">
@@ -189,12 +200,29 @@ $buku_result = mysqli_query($koneksi, $buku_query);
                             </div>
                         </div>
                     </div>
+                    <!-- ✅ TAMBAHAN: Stat card blog -->
+                    <div class="col-md-3 mb-3">
+                        <div class="card stat-card bg-danger text-white">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6 class="mb-0">Artikel Blog</h6>
+                                        <h2 class="mb-0"><?= $total_blog ?></h2>
+                                    </div>
+                                    <i class="fas fa-newspaper fa-3x opacity-50"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Tombol Tambah -->
                 <div class="mb-3">
                     <a href="tambah_buku.php" class="btn btn-success">
                         <i class="fas fa-plus"></i> Tambah Buku Baru
+                    </a>
+                    <a href="kelola_blog.php" class="btn btn-danger ms-2">
+                        <i class="fas fa-newspaper"></i> Kelola Blog
                     </a>
                 </div>
                 

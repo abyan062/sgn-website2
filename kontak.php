@@ -44,9 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     </div>
                     <h5>Alamat</h5>
                     <p class="text-muted">
-                        Jl. Pendidikan No. 123<br>
-                        Jakarta Selatan 12345<br>
-                        Indonesia
+                        Bumi Marina Emas Barat VIII/43B<br>
                     </p>
                 </div>
             </div>
@@ -60,8 +58,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     </div>
                     <h5>Telepon</h5>
                     <p class="text-muted">
-                        +62 21 1234 5678<br>
-                        +62 812 3456 7890
+                        081238555600<br>
+                        082338387862
                     </p>
                 </div>
             </div>
