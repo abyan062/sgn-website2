@@ -2,10 +2,10 @@
 // File: includes/koneksi.php
 // Fungsi: Menghubungkan PHP dengan database MySQL
 
-$host = "localhost";     // alamat server database
-$username = "root";      // username default XAMPP
-$password = "";          // password default XAMPP (kosong)
-$database = "db_sgn2";    // nama database kita
+$host = "sql202.infinityfree.com";
+$username = "if0_41862876";
+$password = "bg4gpdBcwv0Jk";
+$database = "if0_41862876_db_sgn2";
 
 // Bikin koneksi
 $koneksi = mysqli_connect($host, $username, $password, $database);
